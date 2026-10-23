@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import api from '../api/axios';
 
 const AuthContext = createContext(null);
@@ -6,6 +6,20 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user') || 'null'));
+  const [loading, setLoading] = useState(!!localStorage.getItem('token'));
+
+  // validate the stored token when the app loads
+  useEffect(() => {
+    if (!localStorage.getItem('token')) return;
+    api
+      .get('/auth/me')
+      .then(({ data }) => setUser(data))
+      .catch(() => {
+        localStorage.clear();
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const persist = ({ token, user }) => {
     localStorage.setItem('token', token);
@@ -25,7 +39,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
