@@ -3,6 +3,8 @@ export const CATEGORIES = {
   expense: ['Rent', 'Food', 'Transport', 'Utilities', 'Shopping', 'Health', 'Entertainment', 'Other'],
 };
 
+export const ALL_CATEGORIES = [...new Set([...CATEGORIES.income, ...CATEGORIES.expense])];
+
 export const money = (n) =>
   new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(n);
 

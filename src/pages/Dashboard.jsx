@@ -4,24 +4,29 @@ import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { errMsg } from '../utils/format';
 import Navbar from '../components/Navbar';
+import Filters from '../components/Filters';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
+
+const EMPTY = { type: '', category: '', from: '', to: '' };
+const toParams = (f) => Object.fromEntries(Object.entries(f).filter(([, v]) => v));
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [transactions, setTransactions] = useState([]);
+  const [filters, setFilters] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     try {
-      const { data } = await api.get('/transactions');
+      const { data } = await api.get('/transactions', { params: toParams(filters) });
       setTransactions(data);
     } catch (err) {
       toast.error(errMsg(err));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [filters]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -56,7 +61,8 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold">Hello, {user?.name}</h1>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <TransactionForm onAdd={addTransaction} />
-          <div className="lg:col-span-2">
+          <div className="space-y-4 lg:col-span-2">
+            <Filters filters={filters} setFilters={setFilters} />
             {loading ? (
               <p className="panel text-sm text-slate-500">Loading transactions...</p>
             ) : (
