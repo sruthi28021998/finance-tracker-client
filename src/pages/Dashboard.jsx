@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import Filters from '../components/Filters';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
+import Charts from '../components/Charts';
 
 const EMPTY = { type: '', category: '', from: '', to: '' };
 const toParams = (f) => Object.fromEntries(Object.entries(f).filter(([, v]) => v));
@@ -59,6 +60,7 @@ export default function Dashboard() {
       <Navbar />
       <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
         <h1 className="text-2xl font-bold">Hello, {user?.name}</h1>
+        <Charts transactions={transactions} />
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <TransactionForm onAdd={addTransaction} />
           <div className="space-y-4 lg:col-span-2">
