@@ -2,7 +2,7 @@ import { money, shortDate } from '../utils/format';
 
 export default function TransactionList({ transactions, onDelete }) {
   if (!transactions.length) {
-    return <p className="panel text-sm text-slate-500">No transactions yet. Add your first one.</p>;
+    return <p className="panel text-sm text-slate-500">No transactions found. Add one or change your filters.</p>;
   }
 
   return (
@@ -13,7 +13,7 @@ export default function TransactionList({ transactions, onDelete }) {
             <p className="truncate font-medium">{t.category}{t.note ? ` · ${t.note}` : ''}</p>
             <p className="text-xs text-slate-500">{shortDate(t.date)}</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3">
             <span className={`font-bold ${t.type === 'income' ? 'text-income' : 'text-expense'}`}>
               {t.type === 'income' ? '+' : '-'}{money(t.amount)}
             </span>

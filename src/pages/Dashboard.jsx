@@ -4,11 +4,11 @@ import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { errMsg } from '../utils/format';
 import Navbar from '../components/Navbar';
+import StatsCards from '../components/StatsCards';
+import Charts from '../components/Charts';
 import Filters from '../components/Filters';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
-import Charts from '../components/Charts';
-import StatsCards from '../components/StatsCards';
 
 const EMPTY = { type: '', category: '', from: '', to: '' };
 const toParams = (f) => Object.fromEntries(Object.entries(f).filter(([, v]) => v));
@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
   const [filters, setFilters] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -56,6 +57,8 @@ export default function Dashboard() {
     }
   };
 
+  const visible = showAll ? transactions : transactions.slice(0, 5);
+
   return (
     <>
       <Navbar />
@@ -63,14 +66,26 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold">Hello, {user?.name}</h1>
         <StatsCards transactions={transactions} />
         <Charts transactions={transactions} />
+
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <TransactionForm onAdd={addTransaction} />
           <div className="space-y-4 lg:col-span-2">
             <Filters filters={filters} setFilters={setFilters} />
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold">{showAll ? 'All transactions' : 'Recent transactions'}</h2>
+              {transactions.length > 5 && (
+                <button onClick={() => setShowAll(!showAll)} className="text-sm font-medium text-income">
+                  {showAll ? 'Show recent' : `View all (${transactions.length})`}
+                </button>
+              )}
+            </div>
             {loading ? (
-              <p className="panel text-sm text-slate-500">Loading transactions...</p>
+              <div className="panel flex items-center gap-3 text-sm text-slate-500">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-300 border-t-ink" />
+                Loading transactions...
+              </div>
             ) : (
-              <TransactionList transactions={transactions} onDelete={deleteTransaction} />
+              <TransactionList transactions={visible} onDelete={deleteTransaction} />
             )}
           </div>
         </div>
