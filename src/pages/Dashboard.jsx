@@ -62,8 +62,8 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
-        <h1 className="text-2xl font-bold">Hello, {user?.name}</h1>
+        <main className="mx-auto max-w-6xl space-y-4 px-3 py-4 sm:px-4 sm:py-6">
+        <h1 className="text-xl font-bold sm:text-2xl">Hello, {user?.name}</h1>
         <StatsCards transactions={transactions} />
         <Charts transactions={transactions} />
 

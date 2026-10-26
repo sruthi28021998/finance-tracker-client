@@ -30,7 +30,7 @@ export default function Charts({ transactions }) {
       <div className="panel">
         <h2 className="mb-2 font-bold">Spending by category</h2>
         {byCategory.length ? (
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={byCategory} dataKey="value" nameKey="name" outerRadius={90}>
                 {byCategory.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
