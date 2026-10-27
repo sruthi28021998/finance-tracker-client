@@ -9,10 +9,10 @@ A responsive web app to track income and expenses, view spending charts and mana
 
 | Login | Dashboard | Mobile |
 |---|---|---|
-  ![Login](./screenshots/login.png) 
-  ![Dashboard](./screenshots/dashboard.png) 
-  ![Mobile](./screenshots/mobile.png) 
-  
+- [Login page](./screenshots/login.png)
+- [Dashboard](./screenshots/dashboard.png)
+- [Mobile view](./screenshots/mobile.png)
+
 ## Features
 - Secure registration and login with JWT
 - Protected routes with automatic logout when the session expires
